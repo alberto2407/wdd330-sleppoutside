@@ -6,10 +6,10 @@ import ProductDetails from "./ProductDetails.mjs";
 const dataSource = new ProductData("tents");
 
 // Obtener el ID del producto de la URL
-const productId = getParam("product");
+const productID = getParam("product");
 
 // Crear instancia de ProductDetails
-const product = new ProductDetails(productId, dataSource);
+const product = new ProductDetails(productID, dataSource);
 
 // Inicializar (carga y renderiza el producto)
 product.init();
