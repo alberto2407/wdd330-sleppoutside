@@ -1,4 +1,4 @@
-import { getParam } from "./utils.mjs";
+import { getParam, updateCartCount } from "./utils.mjs";
 import ProductData from "./ProductData.mjs";
 import ProductDetails from "./ProductDetails.mjs";
 
@@ -13,3 +13,6 @@ const product = new ProductDetails(productID, dataSource);
 
 // Inicializar (carga y renderiza el producto)
 product.init();
+
+// Actualizar el contador de carrito
+updateCartCount();

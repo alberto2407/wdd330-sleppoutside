@@ -1,0 +1,12 @@
+[
+  {
+    "message": "Free shipping on orders over $50!",
+    "background": "darkblue",
+    "color": "white"
+  },
+  {
+    "message": "Summer sale: 20% off all tents!",
+    "background": "#e74c3c",
+    "color": "white"
+  }
+]
