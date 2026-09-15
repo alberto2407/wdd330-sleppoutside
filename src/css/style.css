@@ -203,6 +203,41 @@ button {
   width: 100%;
 }
 
+/* Styles for product details */
+
+.product-card {
+  position: relative;
+}
+
+.discount-indicator {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.discount-badge {
+  background-color: #e74c3c;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.product-card--discounted:hover {
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+/* End styles for product details */
+
 /* Start cart list card styles */
 .cart-card {
   display: grid;
@@ -240,6 +275,186 @@ button {
   grid-row: 2;
   grid-column: 3;
 }
+
+/* End cart list card styles */
+
+/* Styles for price container in product details */
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 0.75em 0;
+}
+
+.product-card__price--sale {
+  color: blue;
+  font-weight: bold;
+}
+
+.original-price {
+  font-size: 1rem;
+  color: red;
+  text-decoration: line-through;
+}
+
+.sale-price {
+  font-size: 1.75em;
+  font-weight: bold;
+  color: blue;
+}
+
+.discount-info {
+  display: inline-block;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* End styles for price container in product details */
+
+/* Styles for cart footer and total price */
+
+.cart-footer {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-top: 2px solid var(--primary-color);
+  text-align: right;
+}
+
+.cart-total {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--dark-grey);
+  padding: 0.5rem 0;
+}
+
+.hide {
+  display: none;
+}
+
+/* End styles for cart footer and total price */
+
+/* Styles for cart count */
+
+.cart {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: 1em;
+  left: 0.5em;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  transform: translate(30%, -30%);
+}
+
+.cart-count.hide {
+  display: none;
+}
+
+/* End styles for cart count */
+
+/* Styles for cart item remove button */
+
+.cart-card {
+  position: relative;
+}
+
+.cart-card__remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  z-index: 2;
+}
+
+.cart-card__remove:hover {
+  background-color: #c0392b;
+  transform: scale(1.15);
+}
+
+.cart-card__remove:active {
+  transform: scale(0.95);
+}
+
+/* End styles for cart item remove button */
+
+/* Styles for alert messages */
+
+.alert-list {
+  width: 100%;
+}
+
+.alert-list p {
+  position: relative;
+  margin: 0;
+  padding: 1rem 2.5rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  display: block;
+}
+
+.alert-close {
+  position: absolute;
+  top: -10px;
+  right: -9px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  line-height: 1;
+  background-color: red;
+}
+
+.alert-close:hover {
+  background-color: darkred;
+}
+
+.alert-close:focus {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* End styles for alert messages */
 
 @media screen and (min-width: 500px) {
   body {

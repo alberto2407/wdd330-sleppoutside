@@ -36,3 +36,23 @@ export function renderListWithTemplate(template, parentElement, list, position =
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
+
+export function getCartCount() {
+  const cartItems = getLocalStorage("so-cart") || [];
+  return cartItems.length;
+}
+
+export function updateCartCount() {
+  const count = getCartCount();
+  const badge = document.querySelector(".cart-count");
+
+  if (!badge) return;
+
+  if (count > 0) {
+    badge.textContent = count;
+    badge.classList.remove("hide");
+  } else {
+    badge.textContent = "0";
+    badge.classList.add("hide");
+  }
+}
