@@ -1,4 +1,4 @@
-import { getParam, updateCartCount } from "./utils.mjs";
+import { getParam, updateCartCount, loadHeaderFooter } from "./utils.mjs";
 import ProductData from "./ProductData.mjs";
 import ProductDetails from "./ProductDetails.mjs";
 
@@ -16,3 +16,8 @@ product.init();
 
 // Actualizar el contador de carrito
 updateCartCount();
+
+// Load Dynamic Header and Footer
+loadHeaderFooter().then(() => {
+  updateCartCount();
+});
