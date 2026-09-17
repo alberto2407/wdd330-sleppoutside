@@ -5,11 +5,11 @@ function convertToJson(res) {
     throw new Error("Bad Response");
   }
 }
-
+// A class to handle product data fetching and searching
 export default class ProductData {
   constructor(category) {
     this.category = category;
-    this.path = `../json/${this.category}.json`;
+    this.path = `/json/${this.category}.json`;
   }
   getData() {
     return fetch(this.path)
