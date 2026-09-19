@@ -2,9 +2,11 @@ import { getLocalStorage, setLocalStorage, updateCartCount } from "./utils.mjs";
 
 // Template for a single cart item
 function cartItemTemplate(item) {
+    const imageUrl = item.Images?.PrimaryMedium || item.Image || "/images/placeholder.jpg";
+
     return `<li class="cart-card divider">
     <a href="/product_pages/?product=${item.Id}" class="cart-card__image">
-      <img src="${item.Images.PrimaryMedium}" alt="${item.Name}">
+      <img src="${imageUrl}" alt="${item.Name}">
     </a>
     <a href="/product_pages/?product=${item.Id}">
       <h2 class="card__name">${item.Name}</h2>
@@ -35,6 +37,15 @@ export default class ShoppingCart {
     // Initializes the cart: loads items and renders the cart
     init() {
         this.cartItems = getLocalStorage("so-cart") || [];
+
+        this.cartItems = this.cartItems.filter(item => {
+            return item.Images?.PrimaryMedium && item.Id && item.FinalPrice;
+        });
+
+        if (this.cartItems.length !== (getLocalStorage("so-cart") || []).length) {
+            setLocalStorage("so-cart", this.cartItems);
+        }
+
         this.renderCart();
     }
 
