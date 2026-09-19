@@ -12,6 +12,10 @@ export default defineConfig({
         cart: resolve(import.meta.dirname, "src/cart/index.html"),
         checkout: resolve(import.meta.dirname, "src/checkout/index.html"),
         product: resolve(import.meta.dirname, "src/product_pages/index.html"),
+        productListing: resolve(
+          import.meta.dirname,
+          "src/product_listing/index.html",
+        ),
       },
     },
   },

@@ -14,9 +14,9 @@ function productCardTemplate(product) {
 
     return `
     <li class="product-card ${hasDiscount ? 'product-card--discounted' : ''}">
-        <a href="product_pages/?product=${product.Id}">
+        <a href="/product_pages/?product=${product.Id}">
             ${discountIndicator}
-            <img src="${product.Image}" alt="${product.NameWithoutBrand}"/>
+            <img src="${product.Images.PrimaryMedium}" alt="${product.NameWithoutBrand}"/>
             <h2 class="card__brand">${product.Brand.Name}</h2>
             <h3 class="card__name">${product.NameWithoutBrand}</h3>
             <div class="price-container">
@@ -37,7 +37,7 @@ export default class ProductList {
     }
 
     async init() {
-        const list = await this.dataSource.getData();
+        const list = await this.dataSource.getData(this.category);
         this.renderList(list);
     }
 
