@@ -12,9 +12,31 @@ function convertToJson(res) {
 // Class to handle product data fetching
 export default class ProductData {
   async getData(category) {
-    const response = await fetch(`${baseURL}products/search/${category}`);
-    const data = await convertToJson(response);
-    return data.Result;
+    const categories = ["tents", "backpacks", "sleeping-bags", "hammocks"];
+
+    if (categories.includes(category.toLowerCase())) {
+      const response = await fetch(`${baseURL}products/search/${category}`);
+      const data = await convertToJson(response);
+      return data.Result;
+    }
+    const allProducts = [];
+    for (const cat of categories) {
+      try {
+        const response = await fetch(`${baseURL}products/search/${cat}`);
+        if (response.ok) {
+          const data = await response.json();
+          const matches = data.Result.filter((product) =>
+            product.Name.toLowerCase().includes(category.toLowerCase()) ||
+            product.NameWithoutBrand.toLowerCase().includes(category.toLowerCase()) ||
+            product.Brand.Name.toLowerCase().includes(category.toLowerCase())
+          );
+          allProducts.push(...matches);
+        }
+      } catch (error) {
+        console.error(`Error en ${cat}:`, error);
+      }
+    }
+    return allProducts;
   }
 
   // Fetch a single product by its ID

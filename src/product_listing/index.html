@@ -12,9 +12,21 @@
   <body>
     <header class="divider" id="main-header"></header>
 
+    <nav aria-label="breadcrumb" class="breadcrumbs" id="breadcrumbs"></nav>
+
     <main class="divider">
       <section class="products">
         <h1 id="product-title">Top Products</h1>
+        <div class="sort-controls">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select">
+            <option value="default">Default</option>
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+            <option value="price-asc">Price (Low to High)</option>
+            <option value="price-desc">Price (High to Low)</option>
+          </select>
+        </div>
         <ul class="product-list"></ul>
       </section>
     </main>

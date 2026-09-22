@@ -1,4 +1,9 @@
-import { getParam, updateCartCount, loadHeaderFooter } from "./utils.mjs";
+import {
+  getParam,
+  updateCartCount,
+  loadHeaderFooter,
+  renderBreadcrumbs,
+} from "./utils.mjs";
 import ProductData from "./ProductData.mjs";
 import ProductDetails from "./ProductDetails.mjs";
 
@@ -7,12 +12,20 @@ const dataSource = new ProductData("tents");
 
 // Obtener el ID del producto de la URL
 const productID = getParam("product");
+// Obtener la categoría de la URL
+const category = getParam("category");
 
 // Crear instancia de ProductDetails
 const product = new ProductDetails(productID, dataSource);
 
 // Inicializar (carga y renderiza el producto)
-product.init();
+product.init().then(() => {
+  // Render the product details
+  renderBreadcrumbs({
+    category: category || "Products", // Look for the real category
+    productName: product.product?.NameWithoutBrand,
+  });
+});
 
 // Actualizar el contador de carrito
 updateCartCount();

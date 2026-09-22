@@ -8,21 +8,79 @@ export default class ProductDetails {
     }
 
     async init() {
-        // Retrieve product data from the data source (asynchronous)
-        this.product = await this.dataSource.findProductById(this.productId);
+        // ✅ Mostrar spinner SIN borrar los elementos existentes
+        this.showLoading();
 
-        // Render the product details page with the data obtained
-        this.renderProductDetails();
+        try {
+            this.product = await this.dataSource.findProductById(this.productId);
 
-        // Add listener for the "Add to Cart" button
-        document.getElementById('addToCart').addEventListener('click', this.addProductToCart.bind(this));
+            if (!this.product) {
+                throw new Error("Producto no encontrado");
+            }
+
+            // ✅ Ocultar spinner y renderizar
+            this.hideLoading();
+            this.renderProductDetails();
+
+            document.getElementById("addToCart")
+                .addEventListener("click", this.addProductToCart.bind(this));
+        } catch (error) {
+            console.error("Error:", error);
+            this.showError();
+        }
+    }
+
+    showLoading() {
+        // ✅ Crear overlay con spinner
+        const existing = document.getElementById("loading-overlay");
+        if (existing) existing.remove();
+
+        const overlay = document.createElement("div");
+        overlay.id = "loading-overlay";
+        overlay.className = "loading-overlay";
+        overlay.innerHTML = `
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Cargando producto...</p>
+            </div>
+        `;
+        document.querySelector(".product-detail").appendChild(overlay);
+    }
+
+    hideLoading() {
+        const overlay = document.getElementById("loading-overlay");
+        if (overlay) overlay.remove();
+    }
+
+    showError() {
+        const container = document.querySelector(".product-detail");
+        if (container) {
+            container.innerHTML = `
+                <div class="error-message">
+                    <p>😕 No pudimos cargar el producto.</p>
+                    <p>Por favor, intenta de nuevo.</p>
+                    <a href="/">← Volver al inicio</a>
+                </div>
+            `;
+        }
     }
 
     addProductToCart() {
         const cartItems = getLocalStorage("so-cart") || [];
-        cartItems.push(this.product);
-        setLocalStorage("so-cart", cartItems);
 
+        // Look for if the product is already in the cart
+        const existingItem = cartItems.find((item) => item.Id === this.product.Id);
+
+        if (existingItem) {
+            // Increase quantity
+            existingItem.Quantity = (existingItem.Quantity || 1) + 1;
+        } else {
+            // Add to cart
+            this.product.Quantity = 1;
+            cartItems.push(this.product);
+        }
+
+        setLocalStorage("so-cart", cartItems);
         updateCartCount();
     }
 
@@ -38,6 +96,19 @@ function productDetailsTemplate(product) {
     const productImage = document.getElementById('productImage');
     productImage.src = product.Images.PrimaryLarge;
     productImage.alt = product.NameWithoutBrand;
+
+    const flagContainer = document.getElementById('discount-flag-container');
+    const hasDiscount = product.FinalPrice < product.SuggestedRetailPrice;
+
+    if (hasDiscount && flagContainer) {
+        const discountPercent = Math.round(
+            ((product.SuggestedRetailPrice - product.FinalPrice) /
+                product.SuggestedRetailPrice) * 100
+        );
+        flagContainer.innerHTML = `<span class="discount-flag">-${discountPercent}% OFF</span>`;
+    } else if (flagContainer) {
+        flagContainer.innerHTML = '';
+    }
 
     document.getElementById('productPrice').innerHTML = priceTemplate(product);
     document.getElementById('productColor').textContent = product.Colors[0].ColorName;
@@ -59,7 +130,7 @@ function priceTemplate(product) {
       <div class="price-container">
         <span class="original-price">$${product.SuggestedRetailPrice.toFixed(2)}</span>
         <span class="sale-price">$${product.FinalPrice.toFixed(2)}</span>
-        <span class="discount-info">Save ${discountPercent}%</span>
+        <!-- <span class="discount-info">Save ${discountPercent}%</span> -->
       </div>
     `;
     }

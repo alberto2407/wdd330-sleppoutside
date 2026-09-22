@@ -1,6 +1,11 @@
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
-import { loadHeaderFooter, getParam, updateCartCount } from "./utils.mjs";
+import {
+  loadHeaderFooter,
+  getParam,
+  updateCartCount,
+  renderBreadcrumbs,
+} from "./utils.mjs";
 
 // Load dynamic header and footer
 loadHeaderFooter().then(() => {
@@ -16,15 +21,27 @@ const listElement = document.querySelector(".product-list");
 const myList = new ProductList(category, dataSource, listElement);
 
 // Initialize the product list
-myList.init();
+myList.init().then(() => {
+  // Render the product list
+  renderBreadcrumbs({
+    category: category,
+    itemCount: myList.products.length,
+  });
+});
 
-// Update the page title
+// Update the page title based on the category or search term
 const titleElement = document.getElementById("product-title");
 if (titleElement && category) {
-  // Capitalize the first letter of each word in the category for better display
-  const formattedCategory = category
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-  titleElement.textContent = `Top Products: ${formattedCategory}`;
+  const knownCategories = ["tents", "backpacks", "sleeping-bags", "hammocks"];
+  const isCategory = knownCategories.includes(category.toLowerCase());
+
+  if (isCategory) {
+    const formattedCategory = category
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+    titleElement.textContent = `Top Products: ${formattedCategory}`;
+  } else {
+    titleElement.textContent = `Search Results for: "${category}"`;
+  }
 }
