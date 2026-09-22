@@ -12,16 +12,21 @@
   <body>
     <header class="divider" id="main-header"></header>
 
+    <nav aria-label="breadcrumb" class="breadcrumbs" id="breadcrumbs"></nav>
+
     <main class="divider">
       <section class="product-detail">
         <h1 id="productBrand">Brand Name</h1>
         <h2 class="divider" id="productName">Product</h2>
-        <img
-          class="divider"
-          id="productImage"
-          src="/images/placeholder.jpg"
-          alt="Product Image"
-        />
+        <div class="product-image-container">
+          <div id="discount-flag-container"></div>
+          <img
+            class="divider"
+            id="productImage"
+            src="/images/placeholder.jpg"
+            alt="Product Image"
+          />
+        </div>
         <div id="productPrice"></div>
         <p id="productColor" class="product__color">Color</p>
         <p id="productDescription" class="product__description">Description</p>
