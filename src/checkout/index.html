@@ -14,9 +14,100 @@
     <header class="divider" id="main-header"></header>
 
     <main class="divider">
-      <section class="products">
-        <h1>Review & Place your Order</h1>
-      </section>
+      <h1>Checkout</h1>
+
+      <div class="checkout-container">
+        <form id="checkout-form" class="checkout-form">
+          <fieldset>
+            <legend>Customer Information</legend>
+
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="fname" required />
+
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="lname" required />
+          </fieldset>
+
+          <fieldset>
+            <legend>Shipping Address</legend>
+
+            <label for="street">Street Address</label>
+            <input type="text" id="street" name="street" required />
+
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required />
+
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" required />
+
+            <label for="zip">Zip Code</label>
+            <input
+              type="text"
+              id="zip"
+              name="zip"
+              pattern="[0-9]{5}"
+              required
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend>Payment</legend>
+
+            <label for="cardNumber">Credit Card Number</label>
+            <input
+              type="text"
+              id="cardNumber"
+              name="cardNumber"
+              pattern="[0-9]{16}"
+              required
+            />
+
+            <label for="expiration">Expiration Date (MM/YY)</label>
+            <input
+              type="text"
+              id="expiration"
+              name="expiration"
+              placeholder="MM/YY"
+              required
+            />
+
+            <label for="code">Security Code</label>
+            <input
+              type="text"
+              id="code"
+              name="code"
+              pattern="[0-9]{3}"
+              required
+            />
+          </fieldset>
+
+          <button type="submit" class="checkout-submit">Place Order</button>
+        </form>
+
+        <div class="order-summary">
+          <h2>Order Summary</h2>
+
+          <div class="summary-row">
+            <span>Subtotal (<span id="num-items">0</span> items):</span>
+            <span id="subtotal">$0.00</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Tax (6%):</span>
+            <span id="tax">$0.00</span>
+          </div>
+
+          <div class="summary-row">
+            <span>Shipping:</span>
+            <span id="shipping">$0.00</span>
+          </div>
+
+          <div class="summary-row summary-total">
+            <span>Order Total:</span>
+            <span id="orderTotal">$0.00</span>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer id="main-footer"></footer>
