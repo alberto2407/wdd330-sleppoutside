@@ -25,23 +25,23 @@ function productCardTemplate(product) {
     const category = product.Category || '';
 
     return `
-    <li class="product-card ${hasDiscount ? 'product-card--discounted' : ''}">
-        <a href="/product_pages/?product=${product.Id}&category=${product.Category}">
-            ${discountIndicator}
-            <img src="${imageMedium || imageSmall || imageLarge}" srcset="${srcset}" 
-                sizes="(max-width: 500px) 200px, (max-width: 900px) 300px, 400px"
-                alt="${product.NameWithoutBrand}"
-                loading="lazy"
-            />
-            <h2 class="card__brand">${product.Brand.Name}</h2>
-            <h3 class="card__name">${product.NameWithoutBrand}</h3>
-            <div class="price-container">
-                <p class="product-card__price ${hasDiscount ? 'product-card__price--sale' : ''}">
-                    $${product.FinalPrice.toFixed(2)}
-                </p>
-            </div>
-        </a>
-    </li>
+        <li class="product-card ${hasDiscount ? 'product-card--discounted' : ''}">
+            <a href="/product_pages/?product=${product.Id}&category=${product.Category}">
+                ${discountIndicator}
+                <img src="${imageMedium || imageSmall || imageLarge}" srcset="${srcset}" 
+                    sizes="(max-width: 500px) 200px, (max-width: 900px) 300px, 400px"
+                    alt="${product.NameWithoutBrand}"
+                    loading="lazy"
+                />
+                <h2 class="card__brand">${product.Brand.Name}</h2>
+                <h3 class="card__name">${product.NameWithoutBrand}</h3>
+                <div class="price-container">
+                    <p class="product-card__price ${hasDiscount ? 'product-card__price--sale' : ''}">
+                        $${product.FinalPrice.toFixed(2)}
+                    </p>
+                </div>
+            </a>
+        </li>
     `;
 }
 
@@ -54,7 +54,7 @@ export default class ProductList {
     }
 
     async init() {
-        // ✅ Mostrar spinner mientras carga
+        // Show loading spinner
         this.listElement.innerHTML = `
             <li class="loading">
                 <div class="spinner"></div>
@@ -65,7 +65,7 @@ export default class ProductList {
         try {
             const list = await this.dataSource.getData(this.category);
 
-            // ✅ Añadir Category a cada producto
+            // Add category to each product
             this.products = list.map(product => ({
                 ...product,
                 Category: this.category,
@@ -82,7 +82,7 @@ export default class ProductList {
                     <p>Por favor, intenta de nuevo.</p>
                     <a href="/">← Volver al inicio</a>
                 </li>
-                `;
+            `;
             return this;
         }
     }

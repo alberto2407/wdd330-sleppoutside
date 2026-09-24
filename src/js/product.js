@@ -4,11 +4,11 @@ import {
   loadHeaderFooter,
   renderBreadcrumbs,
 } from "./utils.mjs";
-import ProductData from "./ProductData.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 import ProductDetails from "./ProductDetails.mjs";
 
-// Crear instancia de ProductData
-const dataSource = new ProductData("tents");
+// Crear instancia de ExternalServices
+const dataSource = new ExternalServices("tents");
 
 // Obtener el ID del producto de la URL
 const productID = getParam("product");

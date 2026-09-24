@@ -8,7 +8,7 @@ export default class ProductDetails {
     }
 
     async init() {
-        // ✅ Mostrar spinner SIN borrar los elementos existentes
+        // Shgow the spinner
         this.showLoading();
 
         try {
@@ -18,7 +18,7 @@ export default class ProductDetails {
                 throw new Error("Producto no encontrado");
             }
 
-            // ✅ Ocultar spinner y renderizar
+            // Hide the spinner
             this.hideLoading();
             this.renderProductDetails();
 
@@ -31,7 +31,7 @@ export default class ProductDetails {
     }
 
     showLoading() {
-        // ✅ Crear overlay con spinner
+        // Create the loading overlay
         const existing = document.getElementById("loading-overlay");
         if (existing) existing.remove();
 
@@ -127,17 +127,17 @@ function priceTemplate(product) {
         );
 
         return `
-      <div class="price-container">
-        <span class="original-price">$${product.SuggestedRetailPrice.toFixed(2)}</span>
-        <span class="sale-price">$${product.FinalPrice.toFixed(2)}</span>
-        <!-- <span class="discount-info">Save ${discountPercent}%</span> -->
-      </div>
-    `;
+            <div class="price-container">
+                <span class="original-price">$${product.SuggestedRetailPrice.toFixed(2)}</span>
+                <span class="sale-price">$${product.FinalPrice.toFixed(2)}</span>
+                <!-- <span class="discount-info">Save ${discountPercent}%</span> -->
+            </div>
+        `;
     }
 
     return `
-    <div class="price-container">
-      <span class="sale-price">$${product.FinalPrice.toFixed(2)}</span>
-    </div>
-  `;
+        <div class="price-container">
+            <span class="sale-price">$${product.FinalPrice.toFixed(2)}</span>
+        </div>
+    `;
 }
