@@ -222,3 +222,41 @@ export function renderBreadcrumbs({ category, itemCount, productName } = {}) {
   html += '</ol>';
   breadcrumbsElement.innerHTML = html;
 }
+
+// Alert message function 
+export function alertMessage(message, scroll = true) {
+  // Create the alert
+  const alert = document.createElement("div");
+  alert.classList.add("alert");
+
+  // Add the message and button to close 
+  alert.innerHTML = `
+    <p>${message}</p>
+    <span class="alert-close">✕</span>
+  `;
+
+  // Listener for closing the alert
+  alert.addEventListener("click", function (e) {
+    if (e.target.classList.contains("alert-close")) {
+      const main = document.querySelector("main");
+      if (main) main.removeChild(alert);
+    }
+  });
+
+  // Insert at the top
+  const main = document.querySelector("main");
+  if (main) {
+    main.prepend(alert);
+  }
+
+  // Scroll to the top
+  if (scroll) {
+    window.scrollTo(0, 0);
+  }
+}
+
+//Remove all alerts
+export function removeAllAlerts() {
+  const alerts = document.querySelectorAll(".alert");
+  alerts.forEach((alert) => alert.remove());
+}

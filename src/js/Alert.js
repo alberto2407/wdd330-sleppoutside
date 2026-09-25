@@ -48,7 +48,7 @@ export default class Alert {
       // Button for closing the alert (X)
       const closeBtn = document.createElement("span");
       closeBtn.textContent = "✕";
-      closeBtn.classList.add("alert-close");
+      closeBtn.classList.add("alert-list-close");
       closeBtn.setAttribute("aria-label", "Close alert");
       closeBtn.setAttribute("role", "button");
       closeBtn.setAttribute("tabindex", "0");
