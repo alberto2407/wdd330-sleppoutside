@@ -1,4 +1,4 @@
-import { loadHeaderFooter, updateCartCount } from "./utils.mjs";
+import { loadHeaderFooter, updateCartCount, alertMessage } from "./utils.mjs";
 import CheckoutProcess from "./CheckoutProcess.mjs";
 
 // Load Dynamic Header and Footer
@@ -23,17 +23,29 @@ const form = document.getElementById("checkout-form");
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  // Validate form
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
   const submitButton = document.querySelector(".checkout-submit");
-  submitButton.disabled = true;
+  if (submitButton) submitButton.disabled = true;
 
   try {
-    await checkout.checkout(form);
-    alert("Order submitted successfully!");
-    localStorage.removeItem("so-cart");
-    window.location.href = "/";
+    await checkout.checkout();
   } catch (error) {
     console.error("Error submitting order:", error);
-    alert("There was an error submitting your order. Please try again.");
-    submitButton.disabled = false;
+
+    if (error.name === "serviceError") {
+      const messages = Object.values(error.message);
+      messages.forEach((msg) => alertMessage(msg));
+    } else {
+      alertMessage(
+        "There was an error submitting your order. Please try again.",
+      );
+    }
+
+    if (submitButton) submitButton.disabled = false;
   }
 });
