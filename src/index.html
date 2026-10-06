@@ -33,15 +33,15 @@
       </div>
 
       <section class="categories">
-        <h2>Shop by Category</h2>
+        <h1>Shop by Category</h1>
         <div class="category">
           <a href="/product_listing/?category=tents" class="category-card">
             <img src="/images/categories/tents.svg" alt="Tents" />
-            <h3>Tents</h3>
+            <h2>Tents</h2>
           </a>
           <a href="/product_listing/?category=backpacks" class="category-card">
             <img src="/images/categories/backpacks.svg" alt="Backpacks" />
-            <h3>Backpacks</h3>
+            <h2>Backpacks</h2>
           </a>
           <a
             href="/product_listing/?category=sleeping-bags"
@@ -51,13 +51,35 @@
               src="/images/categories/sleeping-bags.svg"
               alt="Sleeping Bags"
             />
-            <h3>Sleeping Bags</h3>
+            <h2>Sleeping Bags</h2>
           </a>
           <a href="/product_listing/?category=hammocks" class="category-card">
             <img src="/images/categories/hammocks.svg" alt="Hammocks" />
-            <h3>Hammocks</h3>
+            <h2>Hammocks</h2>
           </a>
         </div>
+      </section>
+
+      <section class="newsletter-signup">
+        <h2>Join Our Newsletter</h2>
+        <p>
+          Get exclusive deals, outdoor tips, and early access to new products.
+        </p>
+        <form id="newsletter-form" class="newsletter-form">
+          <label for="newsletter-email" class="visually-hidden"
+            >Email address</label
+          >
+          <input
+            type="email"
+            id="newsletter-email"
+            name="email"
+            placeholder="Enter your email address"
+            required
+            autocomplete="email"
+          />
+          <button type="submit" class="newsletter-button">Subscribe</button>
+        </form>
+        <p id="newsletter-message" class="newsletter-message hide"></p>
       </section>
     </main>
     <footer id="main-footer"></footer>

@@ -25,7 +25,11 @@
 </div>
 <div class="cart">
   <a href="/cart/index.html">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <svg
+      class="cart-icon-svg"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+    >
       <path
         d="M18.9 32.6c1.1 2.4 2.5 3.3 5.4 3.3 1.6 0 3.6-0.3 5.9-0.6 3.2-0.5 6.9-1 11.2-1 2.1 0 4.3 0.1 6.4 0.3 2.1 0.1 4.2 0.3 6.1 0.3 3.2 0 5.2-0.4 5.9-1.2 2.7-2.7 2.8-8.8 2.9-14.6 0.1-6.7 0.2-14.5 4.6-18.7 -0.5 0-1 0-1.6 0 -14.2 0-37.5 0-41.1 0C15.6 6.2 14.9 23.6 18.9 32.6z"
       />
@@ -50,4 +54,29 @@
     </svg>
     <span class="cart-count hide">0</span>
   </a>
+</div>
+<div id="auth-section" class="auth-section"></div>
+<div id="welcome-modal" class="modal-overlay hide">
+  <div class="modal welcome-modal-content">
+    <button id="close-welcome-modal" class="modal__close" aria-label="Close">
+      ✕
+    </button>
+    <h2 class="welcome-modal__title">Join the Adventure!</h2>
+    <p class="welcome-modal__text">
+      Register with Sleep Outside today and get a chance to win a
+      <strong>complete camping gear set</strong> for your next trip!
+    </p>
+    <p class="welcome-modal__text">
+      Sign up now to receive exclusive discounts and updates.
+    </p>
+    <a
+      href="/register/"
+      class="modal__add-to-cart welcome-modal__btn"
+      id="register-now-btn"
+      >Register Now</a
+    >
+    <button id="no-thanks-btn" class="welcome-modal__no-thanks">
+      No, thanks
+    </button>
+  </div>
 </div>

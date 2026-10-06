@@ -29,14 +29,16 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
+  // Disable submit button
   const submitButton = document.querySelector(".checkout-submit");
   if (submitButton) submitButton.disabled = true;
 
+  // Submit order
   try {
     await checkout.checkout();
   } catch (error) {
     console.error("Error submitting order:", error);
-
+    // Display error message
     if (error.name === "serviceError") {
       const messages = Object.values(error.message);
       messages.forEach((msg) => alertMessage(msg));
@@ -45,7 +47,6 @@ form.addEventListener("submit", async (e) => {
         "There was an error submitting your order. Please try again.",
       );
     }
-
     if (submitButton) submitButton.disabled = false;
   }
 });

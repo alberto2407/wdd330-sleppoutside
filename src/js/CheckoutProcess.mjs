@@ -3,6 +3,7 @@ import ExternalServices from "./ExternalServices.mjs";
 
 const services = new ExternalServices();
 
+// Convert form data to JSON
 function formDataToJSON(formElement) {
     const formData = new FormData(formElement);
     const convertedJSON = {};
@@ -12,6 +13,7 @@ function formDataToJSON(formElement) {
     return convertedJSON;
 }
 
+// Package items for checkout
 function packageItems(items) {
     return items.map((item) => ({
         id: item.Id,
@@ -21,6 +23,7 @@ function packageItems(items) {
     }));
 }
 
+// Class to handle the checkout process
 export default class CheckoutProcess {
     constructor(key, outputSelector) {
         this.key = key;
@@ -50,7 +53,9 @@ export default class CheckoutProcess {
 
     calculateOrderTotal() {
         this.tax = this.itemTotal * 0.06;
+
         const numItems = this.list.reduce((sum, item) => sum + (item.Quantity || 1), 0);
+
         this.shipping = numItems > 0 ? 10 + (numItems - 1) * 2 : 0;
         this.orderTotal = this.itemTotal + this.tax + this.shipping;
         this.displayOrderTotals();
@@ -65,22 +70,25 @@ export default class CheckoutProcess {
     async checkout() {
         const form = document.forms.checkout;
         const payload = formDataToJSON(form);
+
+        payload.orderDate = new Date().toISOString();
+        payload.orderTotal = this.orderTotal;
+        payload.tax = this.tax;
+        payload.shipping = this.shipping;
+        payload.items = packageItems(this.list);
+    }
+    async checkout() {
+        const form = document.forms.checkout;
+        const payload = formDataToJSON(form);
+
         payload.orderDate = new Date().toISOString();
         payload.orderTotal = this.orderTotal;
         payload.tax = this.tax;
         payload.shipping = this.shipping;
         payload.items = packageItems(this.list);
 
-        try {
-            await services.checkout(payload);
-            setLocalStorage(this.key, []);
-            window.location.assign("/checkout/success.html");
-        } catch (error) {
-            removeAllAlerts();
-            const messages = error.message && typeof error.message === "object"
-                ? Object.values(error.message)
-                : [error.message || "Unable to place your order."];
-            messages.forEach((message) => alertMessage(message));
-        }
+        await services.checkout(payload);
+        setLocalStorage(this.key, []);
+        window.location.assign("/checkout/success.html");
     }
 }

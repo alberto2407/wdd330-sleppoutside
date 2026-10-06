@@ -1,4 +1,4 @@
-import { getLocalStorage, setLocalStorage, updateCartCount } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, updateCartCount, animateCartIcon } from "./utils.mjs";
 
 // Template for a single cart item
 function cartItemTemplate(item) {
@@ -29,15 +29,20 @@ function cartItemTemplate(item) {
         
         <p class="cart-card__price">$${itemTotal}</p>
         
-        <button class="cart-card__remove" data-id="${item.Id}" aria-label="Remove item">✕</button>
+        <div class="cart-item-buttons">
+          <button class="cart-card__remove" data-id="${item.Id}" aria-label="Remove item">✕</button>
+          <button class="move-to-wishlist-btn" data-id="${item.Id}">Move to Wishlist</button>
+        </div>
     </li>`;
 }
 
 // Template for an empty cart message
 function emptyCartTemplate() {
-    return `<li class="empty-cart">
-        <p>Your cart is empty</p>
-    </li>`;
+    return `
+        <li class="empty-cart">
+            <p>Your cart is empty</p>
+        </li>
+    `;
 }
 
 //Class ShoppingCart
@@ -146,6 +151,7 @@ export default class ShoppingCart {
             setLocalStorage("so-cart", this.cartItems);
             this.renderCart();
             updateCartCount();
+            animateCartIcon();
         }
     }
     // Decreases the quantity of an item in the cart
@@ -166,6 +172,7 @@ export default class ShoppingCart {
             setLocalStorage("so-cart", this.cartItems);
             this.renderCart();
             updateCartCount();
+            animateCartIcon();
         }
     }
 
