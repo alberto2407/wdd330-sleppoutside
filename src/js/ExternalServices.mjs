@@ -1,3 +1,5 @@
+import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+
 const baseURL = import.meta.env.VITE_SERVER_URL;
 
 // Convert response to JSON
@@ -60,5 +62,126 @@ export default class ExternalServices {
     };
 
     return await fetch(`${baseURL}checkout`, options).then(convertToJson);
+  }
+
+  async login(email, password) {
+    // Look for the user in localStorage first
+    const localUsers = getLocalStorage("so-local-users") || [];
+    let user = localUsers.find(
+      (u) => u.email === email && u.password === password
+    );
+
+    // If not found locally, check the server
+    if (!user) {
+      const response = await fetch(`${baseURL}users`);
+      const serverUsers = await convertToJson(response);
+      user = serverUsers.find(
+        (u) => u.email === email && u.password === password
+      );
+    }
+
+    if (user) {
+      const token = btoa(`${user.email}:${Date.now()}`);
+      return {
+        token,
+        user: {
+          email: user.email,
+          firstname: user.firstname || "",
+          lastname: user.lastname || "",
+          avatar: user.avatar || "",
+          street: user.street || "",
+          city: user.city || "",
+          state: user.state || "",
+          zip: user.zip || "",
+        }
+      };
+    } else {
+      throw {
+        name: "serviceError",
+        message: { message: "Invalid email or password" }
+      };
+    }
+  }
+
+  // Get orders from the server
+  async getOrders(token) {
+    const options = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await fetch(`${baseURL}orders`, options);
+    const data = await convertToJson(response);
+    return data; // json-server returns the array directly
+  }
+
+  // Register a new user
+  async registerUser(userData) {
+    const localUsers = getLocalStorage("so-local-users") || [];
+    const newUser = {
+      ...userData,
+      id: Date.now(), // Unique local ID
+    };
+    localUsers.push(newUser);
+    setLocalStorage("so-local-users", localUsers);
+
+    try {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      };
+      // Attempt to save the user on the server
+      const response = await fetch(`${baseURL}users`, options);
+      const data = await convertToJson(response);
+      return data;
+    } catch (error) {
+      console.warn("Server rejected user, but saved locally:", error);
+      return newUser;
+    }
+  }
+
+  // Check if an email already exists
+  async emailExists(email) {
+    // Look for the email in localStorage 
+    const localUsers = getLocalStorage("so-local-users") || [];
+    if (localUsers.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
+      return true;
+    }
+
+    // Look for the email on the server
+    try {
+      const response = await fetch(`${baseURL}users`);
+      const users = await convertToJson(response);
+      return users.some((u) => u.email.toLowerCase() === email.toLowerCase());
+    } catch (error) {
+      console.warn("Could not check server for email:", error);
+      return false;
+    }
+  }
+
+  // Get comments for a specific product
+  async getComments(productId) {
+    // Simulate a short delay so the spinner is visible.
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    const allComments = getLocalStorage("so-comments") || [];
+    return allComments.filter((c) => c.productId === productId);
+  }
+
+  // Add a new comment (to localStorage)
+  async addComment(commentData) {
+    const allComments = getLocalStorage("so-comments") || [];
+    const newComment = {
+      ...commentData,
+      id: Date.now(), // Unique ID
+    };
+    allComments.push(newComment);
+    setLocalStorage("so-comments", allComments);
+    return newComment;
   }
 }

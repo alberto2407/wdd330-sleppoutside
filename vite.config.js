@@ -10,6 +10,9 @@ export default defineConfig({
       input: {
         main: resolve(import.meta.dirname, "src/index.html"),
         cart: resolve(import.meta.dirname, "src/cart/index.html"),
+        login: resolve(import.meta.dirname, "src/login/index.html"),
+        orders: resolve(import.meta.dirname, "src/orders/index.html"),
+        register: resolve(import.meta.dirname, "src/register/index.html"),
         checkout: resolve(import.meta.dirname, "src/checkout/index.html"),
         success: resolve(import.meta.dirname, "src/checkout/success.html"),
         product: resolve(import.meta.dirname, "src/product_pages/index.html"),

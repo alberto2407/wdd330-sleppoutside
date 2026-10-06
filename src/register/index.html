@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep Outside | Register</title>
+    <link rel="icon" type="image/svg+xml" href="/images/noun_Tent_2517.svg" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <script type="module" src="/js/register.js"></script>
+  </head>
+
+  <body>
+    <header class="divider" id="main-header"></header>
+    <nav aria-label="breadcrumb" class="breadcrumbs" id="breadcrumbs"></nav>
+    <main class="divider">
+      <section class="register-container">
+        <h1>Create Your Account</h1>
+        <p class="register-subtitle">
+          Join Sleep Outside and start your adventure today!
+        </p>
+
+        <form id="register-form" class="register-form">
+          <fieldset>
+            <legend>Personal Information</legend>
+
+            <label for="firstname">First Name *</label>
+            <input type="text" id="firstname" name="firstname" required />
+
+            <label for="lastname">Last Name *</label>
+            <input type="text" id="lastname" name="lastname" required />
+
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required />
+
+            <label for="password">Password *</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              minlength="6"
+              required
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend>Shipping Address</legend>
+
+            <label for="street">Street Address *</label>
+            <input type="text" id="street" name="street" required />
+
+            <label for="city">City *</label>
+            <input type="text" id="city" name="city" required />
+
+            <label for="state">State *</label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              maxlength="2"
+              required
+              placeholder="ID"
+            />
+
+            <label for="zip">Zip Code *</label>
+            <input
+              type="text"
+              id="zip"
+              name="zip"
+              pattern="[0-9]{5}"
+              required
+              placeholder="83440"
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend>Choose Your Avatar</legend>
+            <p class="avatar-hint">Pick an avatar that represents you!</p>
+            <div id="avatar-picker" class="avatar-picker"></div>
+          </fieldset>
+
+          <button type="submit" class="register-submit">Create Account</button>
+        </form>
+
+        <p id="register-message" class="register-message hide"></p>
+      </section>
+    </main>
+    <footer id="main-footer"></footer>
+  </body>
+</html>

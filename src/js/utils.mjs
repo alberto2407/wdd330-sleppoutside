@@ -79,6 +79,9 @@ export async function loadHeaderFooter() {
 
   searchProducts();
   updateCartCount();
+  updateWishlistCount();
+  initWelcomeModal();
+  updateAuthLink();
 }
 
 // Perform a search and navigate to the product listing page
@@ -253,10 +256,276 @@ export function alertMessage(message, scroll = true) {
   if (scroll) {
     window.scrollTo(0, 0);
   }
+
+  setTimeout(() => {
+    removeAlert(alert);
+  }, 3000);
+}
+
+// Function to remove an alert with a fade-out effect
+function removeAlert(alertElement) {
+  if (!alertElement || !alertElement.parentNode) return;
+
+  // Add the fade-out class
+  alertElement.classList.add("fade-out");
+
+  // Remove after the animation completes
+  setTimeout(() => {
+    if (alertElement.parentNode) {
+      alertElement.parentNode.removeChild(alertElement);
+    }
+  }, 500);
 }
 
 //Remove all alerts
 export function removeAllAlerts() {
   const alerts = document.querySelectorAll(".alert");
   alerts.forEach((alert) => alert.remove());
+}
+
+// Function to initialize the Welcome/Giveaway Modal
+export function initWelcomeModal() {
+  const modal = document.getElementById("welcome-modal");
+  const closeBtn = document.getElementById("close-welcome-modal");
+  const noThanksBtn = document.getElementById("no-thanks-btn");
+  const registerBtn = document.getElementById("register-now-btn");
+  const storageKey = "so-welcome-seen";
+
+  // If the modal doesn't exist on this page, exit.
+  if (!modal) return;
+
+  // Function to close the modal and set the flag in localStorage
+  const closeModal = () => {
+    modal.classList.add("hide");
+    setLocalStorage(storageKey, true);
+  };
+
+  // Add event listeners to the buttons
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
+  if (noThanksBtn) noThanksBtn.addEventListener("click", closeModal);
+
+  // If they click "Register Now", we also close and mark as seen.
+  if (registerBtn) registerBtn.addEventListener("click", closeModal);
+
+  // Optional: Close if clicking outside the modal content
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Now, check if we need to SHOW the modal
+  const hasSeen = getLocalStorage(storageKey);
+  if (!hasSeen) {
+    modal.classList.remove("hide");
+  }
+}
+
+// Function to animate the cart icon when an item is added
+export function animateCartIcon() {
+  const cartIcon = document.querySelector(".cart");
+
+  if (!cartIcon) return;
+
+  // Remove the class if it's already there (to restart the animation)
+  cartIcon.classList.remove("animate");
+
+  // Force a reflow to restart the animation
+  void cartIcon.offsetWidth;
+
+  // Add the animation class
+  cartIcon.classList.add("animate");
+
+  // Remove the class after the animation ends (0.6s = 600ms)
+  setTimeout(() => {
+    cartIcon.classList.remove("animate");
+  }, 600);
+}
+
+// Function to initialize the Newsletter Signup form
+export function initNewsletter() {
+  const form = document.getElementById("newsletter-form");
+  const emailInput = document.getElementById("newsletter-email");
+  const messageElement = document.getElementById("newsletter-message");
+  const storageKey = "so-newsletter-subscribed";
+
+  // If the form doesn't exist on this page, exit.
+  if (!form) return;
+
+  // Check if the user already subscribed
+  const alreadySubscribed = getLocalStorage(storageKey);
+
+  if (alreadySubscribed) {
+    // Show a message instead of the form
+    form.classList.add("hide");
+    if (messageElement) {
+      messageElement.textContent = "You're already subscribed to our newsletter!";
+      messageElement.classList.remove("hide", "error");
+      messageElement.classList.add("success");
+    }
+    return;
+  }
+
+  // Handle form submission
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+
+    // Basic validation (HTML5 already handles most of it)
+    if (!email || !email.includes("@")) {
+      if (messageElement) {
+        messageElement.textContent = "Please enter a valid email address.";
+        messageElement.classList.remove("hide", "success");
+        messageElement.classList.add("error");
+      }
+      return;
+    }
+
+    // Save the subscription to localStorage
+    setLocalStorage(storageKey, { email: email, date: new Date().toISOString() });
+
+    // Show success message
+    if (messageElement) {
+      messageElement.textContent = "Thanks for subscribing! Check your inbox for a welcome email.";
+      messageElement.classList.remove("hide", "error");
+      messageElement.classList.add("success");
+    }
+
+    // Hide the form
+    form.classList.add("hide");
+
+    // Show a global alert too
+    alertMessage(`Welcome aboard! You've been subscribed with ${email}.`);
+  });
+}
+
+// Function to update the authentication link in the header based on login status
+function updateAuthLink() {
+  const authSection = document.getElementById("auth-section");
+  if (!authSection) return;
+
+  const storedData = getLocalStorage("so-auth-token");
+
+  // Check if the stored data is an object with a user property or a string 
+  let user = null;
+  if (storedData) {
+    if (storedData.user) {
+      user = storedData.user;
+    } else if (typeof storedData === "string") {
+      try {
+        const decoded = atob(storedData);
+        const email = decoded.split(":")[0];
+        const localUsers = getLocalStorage("so-local-users") || [];
+        user = localUsers.find((u) => u.email === email) || {
+          email,
+          firstname: email.split("@")[0],
+          avatar: "",
+        };
+      } catch (error) {
+        console.error("Could not decode token:", error);
+      }
+    }
+  }
+
+  if (user) {
+    const displayName = user.firstname || user.email.split("@")[0];
+
+    let avatarHtml = "";
+    if (user.avatar) {
+      avatarHtml = `<img src="${user.avatar}" alt="${displayName}" class="user-avatar">`;
+    } else {
+      const initial = displayName.charAt(0).toUpperCase();
+      avatarHtml = `<span class="user-avatar user-avatar--fallback">${initial}</span>`;
+    }
+
+    authSection.innerHTML = `
+      <div class="user-menu">
+        <button id="user-menu-toggle" class="user-menu-toggle" aria-haspopup="true" aria-expanded="false">
+          ${avatarHtml}
+          <span class="user-name">${displayName}</span>
+          <span class="user-menu-caret">▾</span>
+        </button>
+        <div id="user-dropdown" class="user-dropdown hide">
+          <a href="/orders/" class="user-dropdown__item">&#x1F4E6; My Orders</a>
+          <a href="/profile/" class="user-dropdown__item">&#128100; My Profile</a>
+          <hr class="user-dropdown__divider" />
+          <button id="logout-button" class="user-dropdown__item user-dropdown__item--danger">&#128682; Logout</button>
+        </div>
+      </div>
+    `;
+
+    const toggleBtn = document.getElementById("user-menu-toggle");
+    const dropdown = document.getElementById("user-dropdown");
+
+    // Toggle dropdown
+    if (toggleBtn && dropdown) {
+      toggleBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isOpen = !dropdown.classList.contains("hide");
+        if (isOpen) {
+          dropdown.classList.add("hide");
+          toggleBtn.setAttribute("aria-expanded", "false");
+        } else {
+          dropdown.classList.remove("hide");
+          toggleBtn.setAttribute("aria-expanded", "true");
+        }
+      });
+
+      // Close when clicking outside
+      document.addEventListener("click", (e) => {
+        if (
+          !dropdown.classList.contains("hide") &&
+          !authSection.contains(e.target)
+        ) {
+          dropdown.classList.add("hide");
+          toggleBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Close with Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !dropdown.classList.contains("hide")) {
+          dropdown.classList.add("hide");
+          toggleBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    // Logout
+    const logoutBtn = document.getElementById("logout-button");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("so-auth-token");
+        window.location.href = "/";
+      });
+    }
+  } else {
+    authSection.innerHTML = `
+      <a href="/login/" class="auth-link">Login</a>
+    `;
+  }
+}
+
+// Update the wishlist count in the header
+export function updateWishlistCount() {
+  const badge = document.querySelector(".wishlist-count");
+  if (!badge) return;
+
+  const token = getLocalStorage("so-auth-token");
+  const storageKey = token && token.user && token.user.email
+    ? `so-wishlist-${token.user.email}`
+    : "so-wishlist-guest";
+
+  const items = getLocalStorage(storageKey) || [];
+
+  if (items.length > 0) {
+    badge.textContent = items.length;
+    badge.classList.remove("hide");
+  } else {
+    badge.textContent = "0";
+    badge.classList.add("hide");
+  }
 }

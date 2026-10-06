@@ -26,13 +26,50 @@
             src="/images/placeholder.jpg"
             alt="Product Image"
           />
+          <div id="product-thumbnails" class="product-thumbnails hide"></div>
         </div>
         <div id="productPrice"></div>
         <p id="productColor" class="product__color">Color</p>
+        <div id="product-colors" class="product-colors"></div>
         <p id="productDescription" class="product__description">Description</p>
         <div class="product-detail__add">
           <button id="addToCart">Add to Cart</button>
         </div>
+      </section>
+      <section class="product-comments">
+        <h2 class="comments-title">Customer Reviews</h2>
+
+        <form id="comment-form" class="comment-form">
+          <fieldset>
+            <legend>Leave a Comment</legend>
+            <label for="comment-author">Your Name</label>
+            <input
+              type="text"
+              id="comment-author"
+              name="author"
+              required
+              maxlength="50"
+            />
+
+            <label for="comment-text">Your Comment</label>
+            <textarea
+              id="comment-text"
+              name="comment"
+              required
+              rows="4"
+              maxlength="500"
+            ></textarea>
+
+            <button type="submit" class="comment-submit">Post Comment</button>
+          </fieldset>
+        </form>
+
+        <ul id="comments-list" class="comments-list">
+          <li class="loading">
+            <div class="spinner"></div>
+            <p>Loading comments...</p>
+          </li>
+        </ul>
       </section>
     </main>
 
