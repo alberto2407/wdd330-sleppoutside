@@ -13,6 +13,7 @@ export default defineConfig({
         login: resolve(import.meta.dirname, "src/login/index.html"),
         orders: resolve(import.meta.dirname, "src/orders/index.html"),
         register: resolve(import.meta.dirname, "src/register/index.html"),
+        profile: resolve(import.meta.dirname, "src/profile/index.html"),
         checkout: resolve(import.meta.dirname, "src/checkout/index.html"),
         success: resolve(import.meta.dirname, "src/checkout/success.html"),
         product: resolve(import.meta.dirname, "src/product_pages/index.html"),
